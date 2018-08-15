@@ -66,6 +66,6 @@ class SendChatMessageEvent implements ShouldBroadcast
      */
     public function broadcastAs()
     {
-        return 'newMessage'; // todo maybe change this name
+        return 'newMessage';
     }
 }

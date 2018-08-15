@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\SendChatMessageEvent;
 use App\User;
+use http\Exception\InvalidArgumentException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -38,12 +39,26 @@ class ChatController extends Controller
      */
     public function store(Request $request)
     {
+        // Reset cached message and recipient
+        session(['message' => null, 'recipient' => null]);
+
         /** @var User $sender */
         $sender = Auth::user();
         $recipient = User::find($request->chat_partner);
         $message = $request->message;
 
+        // If there is no sender set (which means the user is not logged in)
+        if (!$sender) {
+            // Cache the message that was entered and the recipient that was chosen so that (s)he doesn't have to do
+            // that again after logging in
+            session(['message' => $message, 'recipient' => $recipient]);
+            // Return the user to the login page
+            return redirect('home');
+        }
+
         broadcast(new SendChatMessageEvent($sender, $recipient, $message));
+
+        return view('input')->with('users', User::all());
     }
 
     /**
