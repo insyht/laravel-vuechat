@@ -3,13 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Events\SendChatMessageEvent;
+use App\Service\ChatMessageService;
 use App\User;
-use http\Exception\InvalidArgumentException;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ChatController extends Controller
 {
+    /** @var ChatMessageService $chatMessageService */
+    private $chatMessageService;
+
+    public function __construct()
+    {
+        $this->chatMessageService = app(ChatMessageService::class);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -17,7 +25,13 @@ class ChatController extends Controller
      */
     public function index()
     {
+        $loggedInUser = Auth::user();
+        if (!$loggedInUser) {
+            return redirect('home');
+        }
+
         $users = User::all();
+
         return view('input', ['users' => $users]);
     }
 
@@ -56,7 +70,9 @@ class ChatController extends Controller
             return redirect('home');
         }
 
-        broadcast(new SendChatMessageEvent($sender, $recipient, $message));
+        $timestamp = Carbon::now();
+        $this->chatMessageService->saveMessage($sender, $recipient, $message, $timestamp);
+        broadcast(new SendChatMessageEvent($sender, $recipient, $message, $timestamp));
 
         return view('input')->with('users', User::all());
     }

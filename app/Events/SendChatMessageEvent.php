@@ -33,12 +33,12 @@ class SendChatMessageEvent implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct(User $sender, User $recipient, string $message)
+    public function __construct(User $sender, User $recipient, string $message, Carbon $timestamp)
     {
         $this->sender = $sender;
         $this->recipient = $recipient;
         $this->message = $message;
-        $this->timestamp = Carbon::now();
+        $this->timestamp = $timestamp;
     }
 
     /**

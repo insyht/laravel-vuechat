@@ -1,5 +1,3 @@
-console.log('Bootstrapped!');
-
 window._ = require('lodash');
 window.Popper = require('popper.js').default;
 
@@ -57,7 +55,6 @@ if (token) {
 // });
 
 import Echo from 'laravel-echo'
-
 window.io = require('socket.io-client');
 if (typeof io !== 'undefined') {
     window.Echo = new Echo({
@@ -65,7 +62,18 @@ if (typeof io !== 'undefined') {
     });
 }
 
-window.Echo.channel('chat')
-.listen('.newMessage', (e) => {
-    console.log(e);
+// Start listening in the chat channel
+window.Echo.channel('chat').listen('.newMessage', (messageData) => {
+    var chatWindow = document.getElementById('chatMessages');
+    chatWindow.innerHTML = chatWindow.innerHTML + renderChatMessage(messageData);
 });
+/**
+ * Format and render an individual chat message
+ * @param messageData
+ * @returns {string}
+ */
+function renderChatMessage(messageData) {
+    var html = '<span class="chatMessage">' + messageData.timestamp.date + '||' + messageData.sender.name + ':' + messageData.message + '</span>';
+
+    return html;
+}
