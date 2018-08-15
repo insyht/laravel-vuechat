@@ -1,3 +1,4 @@
+console.log('Bootstrapped!');
 
 window._ = require('lodash');
 window.Popper = require('popper.js').default;
@@ -54,3 +55,17 @@ if (token) {
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     encrypted: true
 // });
+
+import Echo from 'laravel-echo'
+
+window.io = require('socket.io-client');
+if (typeof io !== 'undefined') {
+    window.Echo = new Echo({
+       broadcaster: 'socket.io', host: window.location.hostname + ':6001'
+    });
+}
+
+window.Echo.channel('chat')
+.listen('.newMessage', (e) => {
+    console.log(e);
+});

@@ -5,6 +5,7 @@ namespace App\Events;
 use App\User;
 use Carbon\Carbon;
 use DateTime;
+use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -43,7 +44,7 @@ class SendChatMessageEvent implements ShouldBroadcast
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return \Illuminate\Broadcasting\Channel|array
+     * @return Channel|array
      */
     public function broadcastOn()
     {
@@ -55,6 +56,16 @@ class SendChatMessageEvent implements ShouldBroadcast
         // Always sort by value, so that the lowest user id is first when naming the chat
         sort($participants);
 
-        return new PrivateChannel(sprintf('chat.%d-%d', $participants[0], $participants[1]));
+        return new Channel('chat');// todo change to: sprintf('chat.%d-%d', $participants[0], $participants[1]));
+    }
+
+    /**
+     * Set the event name
+     *
+     * @return string
+     */
+    public function broadcastAs()
+    {
+        return 'newMessage'; // todo maybe change this name
     }
 }
