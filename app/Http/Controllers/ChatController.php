@@ -32,7 +32,7 @@ class ChatController extends Controller
 
         $users = User::all();
 
-        return view('input', ['users' => $users]);
+        return view('chat', ['users' => $users]);
     }
 
     /**
@@ -74,7 +74,7 @@ class ChatController extends Controller
         $this->chatMessageService->saveMessage($sender, $recipient, $message, $timestamp);
         broadcast(new SendChatMessageEvent($sender, $recipient, $message, $timestamp));
 
-        return view('input')->with('users', User::all());
+        return view('chat')->with('users', User::all());
     }
 
     /**

@@ -17,7 +17,7 @@ class ChatServiceProvider extends ServiceProvider
     {
         // Set a var that contains all chats in which the logged in user participated
         view()->composer(
-            'input',
+            'chat',
             function($view) {
                 $loggedInUser = Auth::user();
 
