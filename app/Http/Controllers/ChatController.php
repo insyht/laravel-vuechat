@@ -119,4 +119,9 @@ class ChatController extends Controller
     {
         //
     }
+
+    public function showMessages()
+    {
+        return $this->chatMessageService->getChats();
+    }
 }

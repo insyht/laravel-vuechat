@@ -1,4 +1,12 @@
 .chat {
+  .chatmessages-container {
+    border        : 1px solid #dddddd;
+    width         : 80%;
+    margin-top    : 10px;
+    margin-bottom : 10px;
+    height        : 80%;
+    overflow      : auto;
+  }
   .chatmessage {
     .timestamp {
       color : grey;

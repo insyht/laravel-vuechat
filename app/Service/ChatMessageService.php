@@ -28,10 +28,13 @@ class ChatMessageService
 
         $keys = $redis->keys(sprintf('*%s*', config('chat.chatMessageCachePrefix')));
         $chats = [];
+        $i = 0;
         foreach ($keys as $key) {
             // Remove the prefix Laravel sets on all Redis cache keys
             $chat = cache(str_replace(config('chat.laravelCachePrefix'), '', $key));
             if ($chat) {
+                $chat['id'] = $i;
+                $i++;
                 $chats[] = $chat;
             }
         }

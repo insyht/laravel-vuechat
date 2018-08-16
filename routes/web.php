@@ -17,3 +17,4 @@ Route::get('/', 'ChatController@index');
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/chat', 'ChatController@index');
 Route::post('/chat', 'ChatController@store');
+Route::get('/messages', 'ChatController@showMessages');
