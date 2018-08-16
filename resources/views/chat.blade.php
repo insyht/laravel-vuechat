@@ -1,36 +1,44 @@
-<!-- Temporary view to check if sending chat messages works -->
+<meta name="csrf-token" content="{{ csrf_token() }}">
+<script src="{{ asset('js/app.js') }}" defer></script>
+
 <style>
     .chatMessage {
         display : block;
-        color   : blue;
     }
-    #chatMessages {
+        .chatmessage .timestamp {
+            color: grey;
+        }
+        .chatmessage .sender {
+            color: black;
+        }
+        .chatmessage .body {
+            color: blue;
+        }
+
+    #chatmessages {
         padding : 10px;
         border  : 1px solid black;
         width   : 50%;
     }
 </style>
-<meta name="csrf-token" content="{{ csrf_token() }}">
-@extends('layouts.app')
 
-@section('content')
-    <example-component></example-component>
-@endsection
 
-<div class="" id="chatMessages">
-{{--    @if (isset($chats))--}}
-        @foreach ($chats as $chatMessage)
-            <span class="chatMessage">
-                {{$chatMessage['timestamp']->toRfc7231String()}} ||
-                {{$chatMessage['sender']->name}}:
-                {{$chatMessage['message']}}
-            </span>
-        @endforeach
-    {{--@endif--}}
+<div id="app">
+    <div class="online_users"></div>
+
+    <div class="" id="chatmessages">
+        @if (isset($chats))
+            @foreach ($chats as $chatMessage)
+                <chatmessage timestamp="{{$chatMessage['timestamp']->toRfc7231String()}}" sender="{{$chatMessage['sender']->name}}">
+                    {{$chatMessage['message']}}
+                </chatmessage>
+            @endforeach
+        @endif
+    </div>
+
+    <form method="post" action="/chat">
+        {{csrf_field()}}
+        <textarea name="message" rows="10" cols="40">{{session('message') ?: ''}}</textarea><br>
+        <input type="submit" name="submit" value="Send">
+    </form>
 </div>
-
-<form method="post" action="/chat">
-    {{csrf_field()}}
-    <textarea name="message" rows="10" cols="40">{{session('message') ?: ''}}</textarea><br>
-    <input type="submit" name="submit" value="Send">
-</form>
