@@ -1,44 +1,49 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <script src="{{ asset('js/app.js') }}" defer></script>
+<link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
 <style>
-    .chatMessage {
-        display : block;
+    .chatmessage .timestamp {
+        color: grey;
     }
-        .chatmessage .timestamp {
-            color: grey;
-        }
-        .chatmessage .sender {
-            color: black;
-        }
-        .chatmessage .body {
-            color: blue;
-        }
+    .chatmessage .sender {
+        color: black;
+    }
+    .chatmessage .body {
+        color: blue;
+        display        : inline-block;
+        vertical-align : top;
+    }
 
-    #chatmessages {
-        padding : 10px;
-        border  : 1px solid black;
-        width   : 50%;
+    table {
+        width: 50%;
     }
+
 </style>
 
-
 <div id="app">
-    <div class="online_users"></div>
-
-    <div class="" id="chatmessages">
-        @if (isset($chats))
-            @foreach ($chats as $chatMessage)
-                <chatmessage timestamp="{{$chatMessage['timestamp']->toRfc7231String()}}" sender="{{$chatMessage['sender']->name}}">
-                    {{$chatMessage['message']}}
-                </chatmessage>
-            @endforeach
-        @endif
-    </div>
-
+        <div class="container-fluid" id="chatmessages">
+            @if (isset($chats))
+                @foreach ($chats as $chatMessage)
+                    <chatmessage timestamp="{{$chatMessage['timestamp']->toRfc7231String()}}" sender="{{$chatMessage['sender']->name}}">
+                        {{$chatMessage['message']}}
+                    </chatmessage>
+                @endforeach
+            @endif
+        </div>
     <form method="post" action="/chat">
         {{csrf_field()}}
-        <textarea name="message" rows="10" cols="40">{{session('message') ?: ''}}</textarea><br>
-        <input type="submit" name="submit" value="Send">
+        <table>
+            <tr>
+                <td>
+                    <input type="text" class="form-control " name="message">{{session('message') ?: ''}}</input>
+                </td>
+                <td>
+                    <input type="submit" name="submit" value="Send" class="btn btn-default">
+                </td>
+            </tr>
+        </table>
+
+
     </form>
 </div>
