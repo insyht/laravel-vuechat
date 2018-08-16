@@ -1,0 +1,21 @@
+.chat {
+  .chatmessage {
+    .timestamp {
+      color : grey;
+    }
+
+    .sender {
+      color : black;
+    }
+
+    .body {
+      color          : blue;
+      display        : inline-block;
+      vertical-align : top;
+    }
+  }
+
+  table {
+    width : 50%;
+  }
+}
