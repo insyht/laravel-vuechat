@@ -40,11 +40,11 @@ class ChatMessageService
         usort(
             $chats,
             function($a, $b) {
-                if ($a == $b) {
+                if ($a['timestamp'] == $b['timestamp']) {
                     return 0;
                 }
 
-                return $a < $b ? -1 : 1;
+                return $a['timestamp'] < $b['timestamp'] ? -1 : 1;
             }
         );
 
