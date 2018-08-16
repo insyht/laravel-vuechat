@@ -61,19 +61,3 @@ if (typeof io !== 'undefined') {
        broadcaster: 'socket.io', host: window.location.hostname + ':6001'
     });
 }
-
-// Start listening in the chat channel
-window.Echo.channel('chat').listen('.newMessage', (messageData) => {
-    var chatWindow = document.getElementById('chatMessages');
-    chatWindow.innerHTML = chatWindow.innerHTML + renderChatMessage(messageData);
-});
-/**
- * Format and render an individual chat message
- * @param messageData
- * @returns {string}
- */
-function renderChatMessage(messageData) {
-    var html = '<span class="chatMessage">' + messageData.timestamp.date + '||' + messageData.sender.name + ':' + messageData.message + '</span>';
-
-    return html;
-}
