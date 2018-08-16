@@ -24,7 +24,7 @@ class ChatServiceProvider extends ServiceProvider
                 if ($loggedInUser) {
                     /** @var ChatMessageService $chatMessageService */
                     $chatMessageService = app(ChatMessageService::class);
-                    $view->with('chats', $chatMessageService->getChatsForUser($loggedInUser));
+                    $view->with('chats', $chatMessageService->getChats());
                 }
             }
         );

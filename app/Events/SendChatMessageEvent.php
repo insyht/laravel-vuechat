@@ -7,7 +7,6 @@ use Carbon\Carbon;
 use DateTime;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
@@ -19,9 +18,6 @@ class SendChatMessageEvent implements ShouldBroadcast
     /** @var User */
     public $sender;
 
-    /** @var User */
-    public $recipient;
-
     /** @var string */
     public $message;
 
@@ -31,12 +27,13 @@ class SendChatMessageEvent implements ShouldBroadcast
     /**
      * Create a new event instance.
      *
-     * @return void
+     * @param User   $sender
+     * @param string $message
+     * @param Carbon $timestamp
      */
-    public function __construct(User $sender, User $recipient, string $message, Carbon $timestamp)
+    public function __construct(User $sender, string $message, Carbon $timestamp)
     {
         $this->sender = $sender;
-        $this->recipient = $recipient;
         $this->message = $message;
         $this->timestamp = $timestamp;
     }
@@ -48,15 +45,7 @@ class SendChatMessageEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        $participants = [
-          $this->sender->id,
-          $this->recipient->id
-        ];
-
-        // Always sort by value, so that the lowest user id is first when naming the chat
-        sort($participants);
-
-        return new Channel('chat');// todo change to: sprintf('chat.%d-%d', $participants[0], $participants[1]));
+        return new Channel('chat');
     }
 
     /**

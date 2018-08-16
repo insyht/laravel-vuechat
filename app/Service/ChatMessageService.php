@@ -17,7 +17,7 @@ class ChatMessageService
      *
      * @return array
      */
-    public function getChatsForUser(Authenticatable $user): array
+    public function getChats(): array
     {
         try {
             /** @var RedisManager $redis */
@@ -31,7 +31,7 @@ class ChatMessageService
         foreach ($keys as $key) {
             // Remove the prefix Laravel sets on all Redis cache keys
             $chat = cache(str_replace(config('chat.laravelCachePrefix'), '', $key));
-            if ($chat && in_array($user->id, [$chat['sender']->id, $chat['recipient']->id])) {
+            if ($chat) {
                 $chats[] = $chat;
             }
         }
@@ -53,22 +53,20 @@ class ChatMessageService
 
     /**
      * @param User   $sender
-     * @param User   $recipient
      * @param string $message
      * @param Carbon $timestamp
      *
      * @throws \Exception
      */
-    public function saveMessage(User $sender, User $recipient, string $message, Carbon $timestamp)
+    public function saveMessage(User $sender, string $message, Carbon $timestamp)
     {
         $content = [
           'sender' => $sender,
-          'recipient' => $recipient,
           'message' => $message,
           'timestamp' => $timestamp,
         ];
         $duration = 60*24*7; // One week
-        $key = $timestamp->timestamp . $sender->id . $recipient->id . mt_rand(1,1000000);
+        $key = $timestamp->timestamp . $sender->id . mt_rand(1,1000000);
 
         cache([sprintf('%s:%s', config('chat.chatMessageCachePrefix'), $key) => $content], $duration);
     }
