@@ -1,8 +1,8 @@
 /.idea
 yarn-error.log
 .phpunit.result.cache
-/public/js/app.js
-/public/css/app.css
+/public/js/
+/public/css/
 /public/mix-manifest.json
 /package-lock.json
 
