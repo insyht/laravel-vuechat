@@ -14,11 +14,9 @@ window.Vue = require('vue');
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
-
-Vue.component('example-component', require('./components/ExampleComponent.vue'));
-Vue.component('chatmessage', require('./components/chatmessage.vue'));
-Vue.component('sendmessage', require('./components/sendmessage.vue'));
-Vue.component('chat', require('./components/chat.vue'));
+Vue.component('chatmessage', require('./components/chatmessage.vue')); // A single chat message in the chat window
+Vue.component('sendmessage', require('./components/sendmessage.vue')); // The input field and send button for a chat msg
+Vue.component('chat', require('./components/chat.vue')); // The chat window
 
 const app = new Vue({
     el: '#app'
