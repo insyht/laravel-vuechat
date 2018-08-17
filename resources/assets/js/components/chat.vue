@@ -1,7 +1,6 @@
 <template>
     <div class="container-fluid" id="chatmessages">
         <chatmessage
-                v-on:reloadchat="getMessages"
                 v-for="message in messages"
                 :key="message.id"
                 :timestamp="message.timestamp.date"
@@ -21,12 +20,10 @@
         },
         methods: {
             getMessages() {
-                console.log('(re)loading chat..');
                 var me = this;
                 axios.get('/messages')
                      .then(function (response) {
                         me.messages = response.data;
-                        console.log(response.data);
                      }).catch(function (error) {
                         return [];
                 });
@@ -34,6 +31,9 @@
         },
         created() {
             this.getMessages();
+            setInterval(function() {
+                this.getMessages();
+            }.bind(this), 1000);
         }
     }
 </script>

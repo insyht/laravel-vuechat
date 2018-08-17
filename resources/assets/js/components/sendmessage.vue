@@ -5,8 +5,7 @@
                 <input type="text" class="form-control" v-model="message">
             </td>
             <td>
-                <button id="sendButton" type="button" class="btn btn-default" @click="submitMessage(this.message)">Send
-                </button>
+                <button id="sendButton" type="button" class="btn btn-default" @click="submitMessage()">Send</button>
             </td>
         </tr>
     </table>
@@ -34,11 +33,6 @@
                 axios.post('/chat', {
                    message: this.message,
                    token: this.token
-                }).then(function () {
-                    // trigger reload event on chat component
-                    console.log('trigger start');
-                    console.log(me.$emit('reloadchat'));
-                    console.log('trigger done');
                 });
             }
         }
