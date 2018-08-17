@@ -7,6 +7,7 @@ use App\Service\ChatMessageService;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 class ChatController extends Controller
@@ -19,7 +20,7 @@ class ChatController extends Controller
         $this->chatMessageService = app(ChatMessageService::class);
     }
     /**
-     * Display a listing of the resource.
+     * Show the page with the chat
      *
      * @return \Illuminate\Http\Response
      */
@@ -27,31 +28,22 @@ class ChatController extends Controller
     {
         $loggedInUser = Auth::user();
         if (!$loggedInUser) {
+            // User is nog logged in yet, let him/her login
             return redirect('home');
         }
 
-        $users = User::all();
-
-        return view('chat', ['users' => $users]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return view('chat');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\View\View
+     * @throws \Exception
      */
-    public function store(Request $request)
+    public function store(Request $request): \Illuminate\View\View
     {
         // Reset cached message
         session(['message' => null]);
@@ -69,59 +61,21 @@ class ChatController extends Controller
         }
 
         $timestamp = Carbon::now();
+        // Save the message in Redis
         $this->chatMessageService->saveMessage($sender, $message, $timestamp);
+        // Broadcast the message to the channel
         broadcast(new SendChatMessageEvent($sender, $message, $timestamp));
 
-        return view('chat')->with('users', User::all());
+        return view('chat');
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return array
+     * @throws \Exception
      */
-    public function show($id)
+    public function showMessages(): array
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
-    public function showMessages()
-    {
+        // Return all chats as an array
         return $this->chatMessageService->getChats();
     }
 }

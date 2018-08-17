@@ -54,6 +54,7 @@ if (token) {
 //     encrypted: true
 // });
 
+// Start listening to the chat channel using Laravel Echo and Socket.io
 import Echo from 'laravel-echo'
 window.io = require('socket.io-client');
 if (typeof io !== 'undefined') {

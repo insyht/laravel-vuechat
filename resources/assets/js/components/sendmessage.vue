@@ -19,6 +19,7 @@
                 required: true
             },
             token: {
+                // this is the CSRF token from Laravel
                 required: true
             }
         },
@@ -30,11 +31,12 @@
         methods: {
             submitMessage: function () {
                 var me = this;
+                // Send a POST request to save and broadcast the message
                 axios.post('/chat', {
                    message: this.message,
                    token: this.token
                 }).then(function () {
-                    me.message = '';
+                    me.message = ''; // Reset the message input field
                 });
             }
         }

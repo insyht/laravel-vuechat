@@ -15,7 +15,7 @@ class ChatServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // Set a var that contains all chats in which the logged in user participated
+        // Set a var that contains all chats
         view()->composer(
             'chat',
             function($view) {
@@ -31,7 +31,7 @@ class ChatServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register services.
+     * Register the chat message service
      *
      * @return void
      */
