@@ -33,6 +33,8 @@
                 axios.post('/chat', {
                    message: this.message,
                    token: this.token
+                }).then(function () {
+                    me.message = '';
                 });
             }
         }
